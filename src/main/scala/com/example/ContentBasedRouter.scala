@@ -34,3 +34,13 @@ class InventorySystemA extends Actor {
   }
 }
 
+class InventorySystemX extends Actor {
+  def receive = {
+    case OrderPlaced(order) =>
+      println(s"InventorySystemX: handling $order")
+      ContentBasedRouterDriver.completedStep()
+    case _ =>
+      println("InventorySystemX: received unexpected message")
+  }
+}
+
