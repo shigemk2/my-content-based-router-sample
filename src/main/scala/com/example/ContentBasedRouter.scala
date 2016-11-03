@@ -22,6 +22,24 @@ object ContentBasedRouterDriver extends CompletableApp(3) {
 }
 
 class OrderRouter extends Actor {
+  val inventorySystemA = context.actorOf(Props[InventorySystemA], "inventorySystemA")
+  val inventorySystemX = context.actorOf(Props[InventorySystemX], "inventorySystemX")
+
+  def receive = {
+    case orderPlaced: OrderPlaced =>
+      orderPlaced.order.orderType match {
+        case "TypeABC" =>
+          println(s"OrderRouter: routing $orderPlaced")
+          inventorySystemA ! orderPlaced
+        case "TypeXYZ" =>
+          println(s"OrderRouter: routing $orderPlaced")
+          inventorySystemX ! orderPlaced
+      }
+
+      ContentBasedRouterDriver.completedStep()
+    case _ =>
+      println("OrderRouter: received unexpected message")
+  }
 }
 
 class InventorySystemA extends Actor {
