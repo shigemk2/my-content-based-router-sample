@@ -21,3 +21,16 @@ case class OrderPlaced(order: Order)
 object ContentBasedRouterDriver extends CompletableApp(3) {
 }
 
+class OrderRouter extends Actor {
+}
+
+class InventorySystemA extends Actor {
+  def receive = {
+    case OrderPlaced(order) =>
+      println(s"InventorySystemA: handling $order")
+      ContentBasedRouterDriver.completedStep()
+    case _ =>
+      println("InventorySystemA: received unexpected message")
+  }
+}
+
